@@ -23,7 +23,7 @@ export async function login(req, res) {
       console.log("Invalid password");
       return res.status(401).json({ message: "Invalid password!" });
     }
-    req.session.userId = result.id;
+    req.session.userId = user.id;
     console.log("Login successful");
     res
       .status(200)
@@ -64,8 +64,20 @@ export async function register(req, res) {
   }
 }
 
-export async function getUser(res, req) {
-  if (res.session.userId) {
-    res.json({ userId: res.session.userId });
+export async function getUser(req, res) {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [
+      req.session.userId,
+    ]);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const user = result.rows[0];
+    res.json({ username: user.username, email: user.email, id: user.id });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }

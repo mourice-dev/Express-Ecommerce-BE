@@ -23,3 +23,7 @@ const initDb = async () => {
 };
 
 initDb();
+async function tableProducts() {
+
+  await pool.query("CREATE TABLE products ()")
+}
