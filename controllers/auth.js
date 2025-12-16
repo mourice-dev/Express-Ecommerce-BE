@@ -63,3 +63,9 @@ export async function register(req, res) {
     res.status(500).json({ message: "insert failed!", error: err.message });
   }
 }
+
+export async function getUser(res, req) {
+  if (res.session.userId) {
+    res.json({ userId: res.session.userId });
+  }
+}
