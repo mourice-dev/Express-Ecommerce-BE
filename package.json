@@ -4,10 +4,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js", 
     "test": "echo \"Error: no test specified\" && exit 1"
-
-
   },
   "keywords": [],
   "author": "",
@@ -19,5 +18,8 @@
     "express": "^5.1.0",
     "pg": "^8.16.3",
     "validator": "^13.15.23"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }

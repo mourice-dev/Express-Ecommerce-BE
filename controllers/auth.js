@@ -7,19 +7,31 @@ export async function login(req,res) {
         return res.status(400).json({ message: 'input required please!' });
     }
     try {
+     
         const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
         if (result.rows.length === 0) {
+            console.log('User not found');
             return res.status(400).json({ message: 'username not found!' });
         }
-        res.status(200).json({ message: 'login sucessful' });
+
+        const user = result.rows[0];
+        // Note: In a real app, use bcrypt to compare hashed passwords
+        if (user.password !== password) {
+            console.log('Invalid password');
+            return res.status(401).json({ message: 'Invalid password!' });
+        }
+
+        console.log('Login successful');
+        res.status(200).json({ message: 'login sucessful', user: { id: user.id, username: user.username, email: user.email } });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Login error:', err);
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
 }
 
 export async function register(req, res) {
-  const { username, email, password } = req.body;
+  const { name, email, password } = req.body;
+  const username = name;
   if (!username || !email || !password) {
     return res.status(400).json({ message: "input required please!" });
   }
@@ -28,12 +40,20 @@ export async function register(req, res) {
   }
     
   try {
-      await pool.query("INSERT INTO users (username,email,password) VALUES ($1, $2, $3)", [
-        username,email,password
-      ]);
-      res.status(201).json({ message: "register sucessful" });
+      console.log('Attempting to register user:', { username, email });
+      const result = await pool.query(
+        `INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id`,
+        [username, email, password]
+      );
+      
+      if (result.rows.length > 0) {
+        console.log("User inserted with ID:", result.rows[0].id);
+        res.status(201).json({ message: "register sucessful" });
+      }
+      
+     
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "insert failed!" });
+      console.error('Registration error details:', err);
+      res.status(500).json({ message: "insert failed!", error: err.message });
   }
 }

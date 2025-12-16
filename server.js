@@ -1,8 +1,10 @@
-import express from 'express';
-import cors from 'cors';
+/** @format */
+
+import express from "express";
+import cors from "cors";
 import pool from "./config/db.js";
 import { authRoutes } from "./routes/authRoute.js";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -15,5 +17,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
-    console.log(`server run on ${PORT}`);
+  console.log(`server run on ${PORT}`);
 });
+// Server running
