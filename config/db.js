@@ -9,7 +9,9 @@ const { Pool } = pg;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: false, // REQUIRED for Internal Render DB
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 pool.connect((err, client, release) => {
