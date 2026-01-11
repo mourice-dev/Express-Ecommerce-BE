@@ -41,6 +41,10 @@ app.use(
 );
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to the E-commerce API" });
+});
+
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
@@ -48,7 +52,7 @@ app.use("/api/cart", cartRoutes);
 app.get("/healthz", async (req, res) => {
   try {
     await pool.query("SELECT 1");
-    res.json({ database: "connected", status: "healthy" });
+    res.json({ database: "connected" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
