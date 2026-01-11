@@ -48,7 +48,7 @@ app.use("/api/cart", cartRoutes);
 app.get("/healthz", async (req, res) => {
   try {
     await pool.query("SELECT 1");
-    res.json({ database: "connected" });
+    res.json({ database: "connected", status: "healthy" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
