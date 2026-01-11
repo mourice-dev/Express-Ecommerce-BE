@@ -1,5 +1,6 @@
 /** @format */
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
@@ -11,15 +12,23 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
+
+const PgSession = connectPgSimple(session);
+
 const PORT = process.env.PORT || 5000;
 app.use(
   session({
+    store: new PgSession({
+      pool: pool,
+      createTableIfMissing: true,
+    }),
     secret: "secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' is often needed for cross-site cookies if frontend/backend are on different domains
     },
   })
 );
