@@ -48,6 +48,7 @@ const createTables = async () => {
       const products = [
         {
           title: "Premium Wireless Headphones",
+          description: "Immersive sound with active noise cancellation. 30-hour battery life, premium memory foam ear cushions, and crystal-clear microphone for calls.",
           price: 299.99,
           image:
             "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
@@ -56,6 +57,7 @@ const createTables = async () => {
         },
         {
           title: "Minimalist Watch",
+          description: "Elegant timepiece with a sapphire crystal face, genuine leather strap, and Japanese quartz movement. Water-resistant to 50m.",
           price: 129.5,
           image:
             "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80",
@@ -64,6 +66,7 @@ const createTables = async () => {
         },
         {
           title: "Smart Fitness Tracker",
+          description: "Track your health 24/7 with heart rate monitoring, sleep tracking, and GPS. Syncs with your phone for notifications and music control.",
           price: 89.99,
           image:
             "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500&q=80",
@@ -72,6 +75,7 @@ const createTables = async () => {
         },
         {
           title: "Designer Sunglasses",
+          description: "UV400 protection with polarized lenses. Lightweight titanium frame with a timeless aviator design. Includes premium carrying case.",
           price: 159.0,
           image:
             "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&q=80",
@@ -80,6 +84,7 @@ const createTables = async () => {
         },
         {
           title: "Leather Crossbody Bag",
+          description: "Handcrafted from full-grain Italian leather. Features adjustable strap, multiple compartments, and antique brass hardware.",
           price: 199.99,
           image:
             "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500&q=80",
@@ -88,6 +93,7 @@ const createTables = async () => {
         },
         {
           title: "Mechanical Keyboard",
+          description: "Hot-swappable switches, per-key RGB lighting, and a solid aluminum frame. N-key rollover for precise gaming and fast typing.",
           price: 149.99,
           image:
             "https://images.unsplash.com/photo-1587829741301-dc798b91a603?w=500&q=80",
@@ -98,9 +104,10 @@ const createTables = async () => {
 
       for (const product of products) {
         await pool.query(
-          "INSERT INTO products (title, price, image, category, rating) VALUES ($1, $2, $3, $4, $5)",
+          "INSERT INTO products (title, description, price, image, category, rating) VALUES ($1, $2, $3, $4, $5, $6)",
           [
             product.title,
+            product.description,
             product.price,
             product.image,
             product.category,

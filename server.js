@@ -23,7 +23,7 @@ app.use(
       pool: pool,
       createTableIfMissing: true,
     }),
-    secret: "secret-key",
+    secret: process.env.SESSION_SECRET || "secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
