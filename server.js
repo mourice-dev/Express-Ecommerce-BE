@@ -17,7 +17,10 @@ app.set("trust proxy", 1);
 // CORS must come before session middleware so preflight requests work
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: [
+      process.env.FRONTEND_URL || "http://localhost:5173",
+      "https://express-ecommerce-fe.vercel.app"
+    ],
     credentials: true,
   })
 );
