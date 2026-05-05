@@ -14,6 +14,15 @@ dotenv.config();
 const app = express();
 app.set("trust proxy", 1);
 
+// CORS must come before session middleware so preflight requests work
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.json());
+
 const PgSession = connectPgSimple(session);
 
 const PORT = process.env.PORT || 5000;
@@ -28,18 +37,11 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' is often needed for cross-site cookies if frontend/backend are on different domains
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
 );
-
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    credentials: true,
-  })
-);
-app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the E-commerce API" });
