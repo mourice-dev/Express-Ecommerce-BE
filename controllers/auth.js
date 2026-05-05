@@ -12,7 +12,7 @@ export async function login(req, res) {
       .json({ message: "input required please!", error: "Missing fields" });
   }
   try {
-    const result = await pool.query("SELECT * FROM users WHERE username = $1", [
+    const result = await pool.query("SELECT * FROM users WHERE username = $1 OR email = $1", [
       username,
     ]);
     if (result.rows.length === 0) {
